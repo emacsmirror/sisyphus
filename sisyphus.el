@@ -9,7 +9,7 @@
 ;; Package-Version: 0.4.0
 ;; Package-Requires: (
 ;;     (emacs   "30.1")
-;;     (compat  "30.1")
+;;     (compat  "31.0")
 ;;     (cond-let "0.2")
 ;;     (elx      "2.3")
 ;;     (llama    "1.0")
@@ -569,7 +569,7 @@ With prefix argument NOCOMMIT, do not create a commit."
             (let* ((ver (version-to-list ver))
                    (parts (length ver)))
               (cond-let*
-                ((memq pkg '(emacs compat)))
+                ((eq pkg 'emacs))
                 ((memq pkg siblings)
                  (setq ver (version-to-list version)))
                 ([default-directory (borg-worktree (symbol-name pkg))]
