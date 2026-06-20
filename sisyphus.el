@@ -392,14 +392,14 @@ With prefix argument NOCOMMIT, do not create a commit."
 (defun sisyphus--bump-copyright ()
   (dolist (file (nconc (sisyphus--list-libs)
                        (sisyphus--list-tests)))
-    (sisyphus--bump-copyright-lib file))
+    (sisyphus--bump-copyright-file file))
   (when (sisyphus--list-orgs)
     (let ((file (expand-file-name "docs/.orgconfig")))
       (when (file-exists-p file)
-        (sisyphus--bump-copyright-lib file)))
+        (sisyphus--bump-copyright-file file)))
     (magit-call-process "make" "texi")))
 
-(defun sisyphus--bump-copyright-lib (file)
+(defun sisyphus--bump-copyright-file (file)
   (sisyphus--with-file file
     (let ((copyright-update t)
           (copyright-query nil))
