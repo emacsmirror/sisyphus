@@ -88,8 +88,8 @@ If you want to disable that, you must set this to nil before
 (defvar sisyphus-changelog-file "CHANGELOG"
   "The file that contains the changelog.")
 
-(defvar sisyphus-changelog-entry-regexp "^\\* v\\([^ ]+\\) +\\(.+\\)$"
-  "Regexp used to match the beginning of an entry in a changelog file.
+(defvar sisyphus-changelog-heading-regexp "^\\* v\\([^ ]+\\) +\\(.+\\)$"
+  "Regexp used to match a changelog heading.
 
 The file is searched from the beginning.  I.e., it is assumed
 that the first entry concerns either the unreleased development
@@ -113,7 +113,9 @@ The regexp specified here, must match the format specified by
 `sisyphus-changelog-heading-format'.")
 
 (defvar sisyphus-changelog-heading-format "* v%-8v %d\n\n"
-  "Format string used to insert changelog headings.")
+  "Format string used to insert changelog headings.
+The format specified here, must match the regexp specified by
+`sisyphus-changelog-heading-regexp'.")
 
 (defvar sisyphus-bump-dependencies-function
   #'sisyphus-default-bump-dependencies
@@ -253,7 +255,7 @@ With prefix argument NOCOMMIT, do not create a commit."
   (let ((file (expand-file-name sisyphus-changelog-file)))
     (and (file-exists-p file)
          (sisyphus--with-file file
-           (and (re-search-forward sisyphus-changelog-entry-regexp nil t)
+           (and (re-search-forward sisyphus-changelog-heading-regexp nil t)
                 (match-str 1))))))
 
 (defun sisyphus--read-version (&optional prompt)
@@ -285,7 +287,7 @@ With prefix argument NOCOMMIT, do not create a commit."
         (err nil))
     (when (file-exists-p file)
       (sisyphus--with-file file
-        (if (re-search-forward sisyphus-changelog-entry-regexp nil t)
+        (if (re-search-forward sisyphus-changelog-heading-regexp nil t)
             (let ((vers (match-str 1))
                   (date (match-str 2))
                   (prev (sisyphus--previous-version))
